@@ -71,12 +71,12 @@ module gencon (
                     next_state = WAIT_OP2;
                 end
                 else begin
-                    next_state = (read_input) ? WAIT_MULT_OP1 : WAIT_OP1;
+                    if (read_input) next_state = WAIT_MULT_OP1;
                 end
             end
 
             WAIT_MULT_OP1:
-                next_state = (mult_finish) ? ADD_KEY_INPUT_OP1 : WAIT_MULT_OP1;
+                if (mult_finish) next_state = ADD_KEY_INPUT_OP1;
 
             ADD_KEY_INPUT_OP1:
                 next_state = WAIT_OP1;
@@ -86,11 +86,11 @@ module gencon (
                     next_state = SEND_TO_COMPUTE;
                 end
                 else begin
-                    next_state = (read_input) ? WAIT_MULT_OP2 : WAIT_OP2;
+                    if (read_input) next_state = WAIT_MULT_OP2;
                 end
 
             WAIT_MULT_OP2:
-                next_state = (mult_finish) ? ADD_KEY_INPUT_OP2 : WAIT_MULT_OP2;
+                if (mult_finish) next_state = ADD_KEY_INPUT_OP2;
 
             ADD_KEY_INPUT_OP2:
                 next_state = WAIT_OP2;

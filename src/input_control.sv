@@ -148,12 +148,11 @@ module input_control (
 
     case (input_control_state)
       IDLE: next_state = SCAN_COL;
-      SCAN_COL: next_state = key_pressed ? WAIT_STABLE : SCAN_COL;
-      WAIT_STABLE: next_state = (debounce_cnt >= DEBOUNCE_SIZE) ? CONFIRM : WAIT_STABLE;
-      CONFIRM: next_state = key_read ? WAIT_RELEASE : CONFIRM;
-      WAIT_RELEASE: next_state = !key_pressed ? WAIT_RELEASE_STABLE : WAIT_RELEASE;
-      WAIT_RELEASE_STABLE:
-      next_state = (debounce_cnt >= DEBOUNCE_SIZE) ? IDLE : WAIT_RELEASE_STABLE;
+      SCAN_COL: if (key_pressed) next_state = WAIT_STABLE;
+      WAIT_STABLE: if (debounce_cnt >= DEBOUNCE_SIZE) next_state = CONFIRM;
+      CONFIRM: if (key_read) next_state = WAIT_RELEASE;
+      WAIT_RELEASE: if (!key_pressed) next_state = WAIT_RELEASE_STABLE;
+      WAIT_RELEASE_STABLE: if (debounce_cnt >= DEBOUNCE_SIZE) next_state = IDLE;
 
       default: next_state = IDLE;
     endcase
